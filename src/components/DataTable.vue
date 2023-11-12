@@ -1,7 +1,7 @@
 <template>
   <div class="data-table">
     <div class="data-table__filter">
-      <ui-money v-model="moneyFilter" />
+      <ui-money :money-filter="moneyFilter" @update-input="updateInput"/>
     </div>
 
     <div class="data-table__main">
@@ -20,7 +20,7 @@
       </div>
       <div class="data-table__body">
         <div 
-          v-for="row in rows"
+          v-for="row in pageList"
           :key="row.id"
           class="data-table__row"
         >
@@ -59,9 +59,11 @@
           </div>
         </div>
       </div>
+      <div v-if="!filteredTable.length" class="data-table__notification">
+        <p>Результатов не найдено.</p>
+      </div>
     </div>
-
-    <div class="data-table__paginator">
+    <div v-if="filteredTable.length > pageSize" class="data-table__paginator">
       <ui-pagination
         v-model="page"
         :pages="pageCount"
@@ -94,7 +96,23 @@ export default {
 
   computed: {
     pageCount() {
-      return Math.ceil(this.rows.length / this.pageSize);
+      return Math.ceil(this.filteredTable.length / this.pageSize);
+    },
+    filteredTable() {
+      return this.moneyFilter
+        ? this.rows.filter((row) => row.money >= this.moneyFilter)  
+        : this.rows;
+      // return this.rows;
+    },
+    pageList() {
+      const start = (this.page - 1) * this.pageSize;
+      const end = start + this.pageSize;
+      return this.filteredTable.slice(start, end);
+    },
+  },
+  methods: {
+    updateInput(inputValue) {
+      this.moneyFilter = inputValue;
     },
   },
 };
@@ -103,6 +121,10 @@ export default {
 <style lang="sass">
   .data-table
     padding-bottom: 2rem
+    &__notification
+      margin-top: 2rem
+      font-size: 1.1rem
+      font-weight: 600
     &__filter
       display: flex
       justify-content: flex-end

@@ -45,6 +45,36 @@ export default (params) => {
             money: 1000000,
             date: '2020-02-30',
           },
+          {
+            id: 8,
+            name: 'Harry Smith',
+            money: 3000.5,
+            date: '2020-02-26',
+          },
+          {
+            id: 9,
+            name: 'Alex Morphy',
+            money: 4000,
+            date: '2020-02-27',
+          },
+          {
+            id: 10,
+            name: 'Ben Gold',
+            money: 5000,
+            date: '2020-02-28',
+          },
+          {
+            id: 11,
+            name: 'Tim Black',
+            money: 10000,
+            date: '2020-02-28',
+          },
+          {
+            id: 12,
+            name: 'Jimmy Elephant',
+            money: 1000000,
+            date: '2020-02-30',
+          },
         ],
       });
     }, 1500);

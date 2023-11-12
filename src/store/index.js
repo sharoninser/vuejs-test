@@ -36,8 +36,6 @@ export default new Vuex.Store({
 
       try {
         const { data } = isDev ? await mocks(params) : await api.getPayments(params);
-
-        console.log(data);
         if (Array.isArray(data)) {
           commit('setState', { data });
         }

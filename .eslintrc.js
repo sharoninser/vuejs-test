@@ -17,5 +17,8 @@ module.exports = {
 		'no-unused-vars': 'off',
 		'no-trailing-spaces': 'off',
 		'arrow-body-style': 'off',
+    'no-else-return': 'off',
+    'prefer-destructuring': 'off',
+    'max-len': 'off',
 	},
 };

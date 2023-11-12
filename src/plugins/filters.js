@@ -9,8 +9,8 @@ export default {
     Vue.filter('FPrice', (price) => {
       const regExpSeparator = /\B(?=(\d{3})+(?!\d))/g;
       const regExpCutZeros = /\.?0+$/;
-
       const result = (parseFloat(price) ?? 0).toFixed(2);
+
       return result.replace(regExpSeparator, ' ').replace(regExpCutZeros, '');
     });
   },
