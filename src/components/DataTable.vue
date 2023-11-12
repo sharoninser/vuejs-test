@@ -31,12 +31,33 @@
             :class="`data-table__col--${col.prop}`"
             :style="'width: ' + col.width"
           >
-            <span class="data-table__col-title-mobile">{{ col.label }}</span>
-            {{ row[col.prop] }}
+            <span class="data-table__col-value data-table__col-value--title">{{ col.label }}</span>
+            <span 
+              v-if="col.prop === 'id'"
+              class="data-table__col-value"
+            >
+              {{ row[col.prop] }}
+            </span>
+            <span 
+              v-if="col.prop === 'date'"
+              class="data-table__col-value"
+            >
+              {{ row[col.prop] | FDate }}
+            </span>
+            <span 
+              v-if="col.prop === 'name'"
+              class="data-table__col-value"
+            >
+              {{ row[col.prop] }}
+            </span>
+            <span 
+              v-if="col.prop === 'money'"
+              class="data-table__col-value"
+            >
+              {{ row[col.prop] | FPrice }}
+            </span>
           </div>
         </div>
-        <!-- {{ columns }} <br />
-        {{ rows }} -->
       </div>
     </div>
 
@@ -118,9 +139,10 @@ export default {
         width: 100%!important
         border: none
         text-align: left
-      &-title-mobile
-        display: none
-        font-weight: 600
-        @media screen and (max-width: 768px)
-          display: block
+      &-value
+        &--title
+          display: none
+          font-weight: 600
+          @media screen and (max-width: 768px)
+            display: block
 </style>
