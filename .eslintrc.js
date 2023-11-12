@@ -14,5 +14,8 @@ module.exports = {
   rules: {
 		'linebreak-style': 'off',
 		'no-console': 'off',
+		'no-unused-vars': 'off',
+		'no-trailing-spaces': 'off',
+		'arrow-body-style': 'off',
 	},
 };

@@ -4,7 +4,41 @@
       <ui-money v-model="moneyFilter" />
     </div>
 
-    <!-- Your component code here -->
+    <div class="data-table__main">
+      <div class="data-table__head">
+        <div class="data-table__row">
+          <div 
+            v-for="col in columns" 
+            :key="col.id" 
+            class="data-table__col"
+            :class="`data-table__col--${col.prop}`"
+            :style="'width: ' + col.width"
+          >
+            {{ col.label }}
+          </div>
+        </div>
+      </div>
+      <div class="data-table__body">
+        <div 
+          v-for="row in rows"
+          :key="row.id"
+          class="data-table__row"
+        >
+          <div
+            v-for="col in columns"
+            :key="col.id"
+            class="data-table__col"
+            :class="`data-table__col--${col.prop}`"
+            :style="'width: ' + col.width"
+          >
+            <span class="data-table__col-title-mobile">{{ col.label }}</span>
+            {{ row[col.prop] }}
+          </div>
+        </div>
+        <!-- {{ columns }} <br />
+        {{ rows }} -->
+      </div>
+    </div>
 
     <div class="data-table__paginator">
       <ui-pagination
@@ -44,3 +78,49 @@ export default {
   },
 };
 </script>
+
+<style lang="sass">
+  .data-table
+    padding-bottom: 2rem
+    &__filter
+      display: flex
+      justify-content: flex-end
+      margin-bottom: 1.5rem
+    &__paginator
+      margin-top: 1.5rem
+    &__head
+      @media screen and (max-width: 768px)
+        display: none
+      .data-table__col
+        font-weight: 600
+        padding: 0.5rem
+    &__body
+      .data-table__col
+        padding: 1rem 0.5rem
+        @media screen and (max-width: 768px)
+          padding: 0
+    &__row + &__row
+      @media screen and (max-width: 768px)
+        margin-top: 1rem
+    &__row
+      display: flex
+      @media screen and (max-width: 768px)
+        flex-direction: column
+        border: 1px solid #ccc
+        padding: 1rem 1.5rem
+    &__col + &__col
+      @media screen and (max-width: 768px)
+        margin-top: 1rem
+    &__col
+      text-align: center
+      border: 1px solid #ccc
+      @media screen and (max-width: 768px)
+        width: 100%!important
+        border: none
+        text-align: left
+      &-title-mobile
+        display: none
+        font-weight: 600
+        @media screen and (max-width: 768px)
+          display: block
+</style>
