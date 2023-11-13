@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import api from '@/api';
 import mocks from '@/mocks/getPayments';
 
-const isDev = process.env.NODE_ENV === 'development';
+const { VUE_APP_USE_MOCK_DATA: isUseMockData } = process.env;
 
 Vue.use(Vuex);
 
@@ -48,7 +48,7 @@ export default new Vuex.Store({
       }
 
       try {
-        const { data } = isDev ? await mocks(params) : await api.getPayments(params);
+        const { data } = isUseMockData === 'true' ? await mocks(params) : await api.getPayments(params);
 
         if (Array.isArray(data)) {
           localStorage.setItem('data', JSON.stringify(data));
