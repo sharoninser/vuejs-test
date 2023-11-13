@@ -28,16 +28,31 @@ export default new Vuex.Store({
         }
       });
     },
+
+    clearCache(state) {
+      localStorage.removeItem('data');
+      state.data = [];
+      state.isCached = false;
+    },
   },
 
   actions: {
     async load({ commit }, params = {}) {
       commit('setState', { isLoading: true });
 
+      const storageData = localStorage.getItem('data');
+
+      if (storageData) {
+        commit('setState', { data: JSON.parse(storageData), isCached: true, isLoading: false });
+        return;
+      }
+
       try {
         const { data } = isDev ? await mocks(params) : await api.getPayments(params);
+
         if (Array.isArray(data)) {
-          commit('setState', { data });
+          localStorage.setItem('data', JSON.stringify(data));
+          commit('setState', { data, isCached: true });
         }
       } catch (e) {
         // eslint-disable-next-line no-alert
@@ -45,6 +60,11 @@ export default new Vuex.Store({
       } finally {
         commit('setState', { isLoading: false });
       }
+    },
+
+    async onClearCache({ commit, dispatch }) {
+      commit('clearCache');
+      dispatch('load');
     },
   },
 });
