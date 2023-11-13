@@ -1,7 +1,7 @@
 <template>
   <div class="data-table">
     <div class="data-table__filter">
-      <ui-money :money-filter="moneyFilter" @update-input="updateInput"/>
+      <ui-money v-model="moneyFilter" />
     </div>
 
     <div class="data-table__main">
@@ -102,17 +102,11 @@ export default {
       return this.moneyFilter
         ? this.rows.filter((row) => row.money >= this.moneyFilter)  
         : this.rows;
-      // return this.rows;
     },
     pageList() {
       const start = (this.page - 1) * this.pageSize;
       const end = start + this.pageSize;
       return this.filteredTable.slice(start, end);
-    },
-  },
-  methods: {
-    updateInput(inputValue) {
-      this.moneyFilter = inputValue;
     },
   },
 };

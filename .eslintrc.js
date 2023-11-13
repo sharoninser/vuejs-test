@@ -20,5 +20,6 @@ module.exports = {
     'no-else-return': 'off',
     'prefer-destructuring': 'off',
     'max-len': 'off',
+    'no-param-reassign': 'off',
 	},
 };

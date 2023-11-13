@@ -1,9 +1,7 @@
 <template>
   <input
-    v-model="realNumber"
+    v-model="valueInput"
     type="text"
-    @focus="indicatorChange = true"
-    @blur="indicatorChange = false"
     class="ui-money"
   />
 </template>
@@ -14,7 +12,7 @@ export default {
   name: 'UiMoney',
 
   props: {
-    moneyFilter: {
+    value: {
       type: Number,
       require: true,
     },
@@ -22,40 +20,44 @@ export default {
 
   data() {
     return {
-      realNumber: this.moneyFilter,
-      indicatorChange: false,
+      valueInput: this.value || '',
     };
   },
-
   watch: {
-    value: {
-      handler(newValue) {
-        this.valueInput = newValue;
-      },
+    value(newValue) {
+      this.valueInput = newValue ? newValue.toLocaleString() : '';
     },
-    indicatorChange: {
-      handler(bool) {
-        if (!bool) {
-          const regExpSeparator = /\B(?=(\d{3})+(?!\d))/g;
+    valueInput(newValue) {
+      if (newValue !== undefined) {
+        const regExpSeparator = /(\d)(?=(\d{3})+(?!\d))/g;
+        let value = newValue
+          .replace(/,/g, '.')
+          .replace(/[^\d.]/g, '')
+          .replace(/^0+(?=\d)/, '');
 
-          let value = this.realNumber.replace(/,/g, '.').replace(/[^0-9.,]/g, '');
-          const dotIndex = value.indexOf('.');
-
-          const dotCount = (value.match(/\./g) || []).length;
-          if (dotCount > 1) {
-            const lastIndex = value.lastIndexOf('.');
-            value = value.substring(0, lastIndex);
-          }
-          if (dotIndex === 0 || dotIndex === value.length - 1) {
-            value = value.replace(/\./g, '');
-          }
-
-          const number = parseFloat(Number(value).toFixed(2));
-          this.realNumber = number.toString().replace(regExpSeparator, ' ');
-
-          this.$emit('update-input', number);
+        if (value.match(/\./g) && value.match(/\./g).length > 1 && value.endsWith('.')) {
+          value = value.slice(0, -1);
         }
-      },
+        if (value.match(/\./g) && value.length > 1 && value.startsWith('.')) {
+          value = value.slice(1);
+        }
+        if (value.includes('.')) {
+          const parts = value.split('.');
+          parts[0] = parts[0].replace(regExpSeparator, '$1 ');
+
+          if (parts[1] && parts[1].length > 2) {
+            parts[1] = parts[1].slice(0, 2);
+          }
+          value = parts.join('.');
+        } else {
+          value = value.replace(regExpSeparator, '$1 ');
+        }
+
+        this.valueInput = value === '' ? undefined : value;
+
+        const parsedValue = this.valueInput === '' ? undefined : Number(parseFloat(value.replace(/\s/g, '')).toFixed(2));
+        this.$emit('input', parsedValue);
+      }
     },
   },
 };
